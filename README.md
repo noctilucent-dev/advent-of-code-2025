@@ -5,7 +5,7 @@ https://adventofcode.com/2025
 
 ## Prerequisites
 
-- Node (tested with v22)
+- Node (tested with v24)
 - Or use devcontainer
 
 ## Instructions for running
