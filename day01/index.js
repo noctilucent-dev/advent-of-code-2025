@@ -42,41 +42,22 @@ function part1(lines) {
 }
 
 function part2(lines) {
-    let count = 0;
-    let pos = 50;
+    return lines
+        .map(l => [l[0], Number(l.slice(1))])
+        .reduce(([pos, count], [dir, dist]) => {
+            if (dist >= 100) {
+                count += Math.floor(dist / 100);
+                dist %= 100;
+            }
 
-    for(let i=0; i<lines.length; i++) {
-        const line = lines[i];
-        const dir = line[0];
-        let dist = parseInt(line.slice(1), 10);
-        const onZero = (pos === 0);
+            if (dir === 'L' && pos > 0 && pos - dist <= 0) count++;
+            else if (dir === 'R' && pos + dist >= 100) count++;
 
-        if (dist >= 100) {
-            count += Math.floor(dist / 100);
-            dist %= 100;
-        }
-
-        if (dir === 'L') {
-            pos -= dist;
-        } else {
-            pos += dist;
-        }
-
-        if (pos === 0) {
-            log('Landed on 0!');
-            count++;
-        } else if (pos < 0) {
-            log(`Went below 0 from ${pos + dist} by ${-dist}`);
-            pos += 100;
-            if (!onZero) count++;
-        } else if (pos >= 100) {
-            log(`Went above 99 from ${pos - dist} by ${dist}`);
-            pos -= 100;
-            count++;
-        }
-    }
-
-    return count;
+            pos += 100 + (dir === 'L' ? -dist : dist);
+            pos %= 100;
+            
+            return [pos, count];
+        }, [50, 0])[1];
 }
 
 const lines = toTrimmedLines(raw);
